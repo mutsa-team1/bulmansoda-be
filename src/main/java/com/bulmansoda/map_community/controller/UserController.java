@@ -1,0 +1,34 @@
+package com.bulmansoda.map_community.controller;
+
+import com.bulmansoda.map_community.dto.user_service.ChangeNameRequest;
+import com.bulmansoda.map_community.dto.user_service.CreateUserRequest;
+import com.bulmansoda.map_community.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/user")
+public class UserController {
+    private final UserService userService;
+
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @PostMapping("/create")
+    public long join(@RequestBody CreateUserRequest request) {
+        return userService.createUser(request);
+    }
+
+    @DeleteMapping("/delete")
+    public void leave(@RequestBody long userId) {
+        userService.deleteUser(userId);
+    }
+
+    @PutMapping("/name")
+    public void changeName(@RequestBody ChangeNameRequest request) {
+        userService.changeName(request);
+    }
+
+}
