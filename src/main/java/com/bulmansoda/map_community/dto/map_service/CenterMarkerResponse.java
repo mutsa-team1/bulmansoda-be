@@ -6,7 +6,7 @@ import java.util.List;
 
 public class CenterMarkerResponse {
 
-    private long id;
+    private long centerMarkerId;
 
     private double latitude;
 
@@ -15,18 +15,18 @@ public class CenterMarkerResponse {
     private List<String> keywords;
 
     public CenterMarkerResponse(CenterMarker centerMarker) {
-        this.id = centerMarker.getId();
+        this.centerMarkerId = centerMarker.getId();
         this.latitude = centerMarker.getLatitude();
         this.longitude = centerMarker.getLongitude();
         this.keywords = centerMarker.getKeywords();
     }
 
-    public long getId() {
-        return id;
+    public long getCenterMarkerId() {
+        return centerMarkerId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setCenterMarkerId(long centerMarkerId) {
+        this.centerMarkerId = centerMarkerId;
     }
 
     public double getLatitude() {

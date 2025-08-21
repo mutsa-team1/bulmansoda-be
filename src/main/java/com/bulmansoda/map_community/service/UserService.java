@@ -2,6 +2,7 @@ package com.bulmansoda.map_community.service;
 
 import com.bulmansoda.map_community.dto.user_service.ChangeNameRequest;
 import com.bulmansoda.map_community.dto.user_service.CreateUserRequest;
+import com.bulmansoda.map_community.exception.UserNotFoundException;
 import com.bulmansoda.map_community.model.User;
 import com.bulmansoda.map_community.repository.UserRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,12 +24,12 @@ public class UserService {
     }
 
     public void deleteUser(long userId) {
-        User user = userRepository.findById(userId).orElseThrow();
-        userRepository.delete(user);
+        userRepository.deleteById(userId);
     }
 
     public void changeName(ChangeNameRequest request) {
-        User user = userRepository.findById(request.getUserId()).orElseThrow();
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new UserNotFoundException(request.getUserId()));
         user.setName(request.getName());
     }
 

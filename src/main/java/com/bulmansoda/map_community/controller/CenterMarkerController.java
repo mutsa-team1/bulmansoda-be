@@ -8,8 +8,6 @@ import com.bulmansoda.map_community.service.CenterMarkerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/center")
 public class CenterMarkerController {
@@ -31,8 +29,13 @@ public class CenterMarkerController {
         return centerMarkerService.likeCenterMarker(request);
     }
 
-    @PostMapping("/comment")
-    public long comment(@RequestBody CommentRequest request) {
+    @PostMapping("/comment/create")
+    public long createComment(@RequestBody CommentRequest request) {
         return centerMarkerService.commentCenterMarker(request);
+    }
+
+    @DeleteMapping("/comment/delete")
+    public void deleteComment(@RequestBody long commentId) {
+        centerMarkerService.deleteComment(commentId);
     }
 }

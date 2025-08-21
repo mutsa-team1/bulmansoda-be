@@ -1,6 +1,8 @@
 package com.bulmansoda.map_community.service;
 
 import com.bulmansoda.map_community.dto.center_marker_service.*;
+import com.bulmansoda.map_community.exception.CenterMarkerNotFoundException;
+import com.bulmansoda.map_community.exception.UserNotFoundException;
 import com.bulmansoda.map_community.model.CenterMarker;
 import com.bulmansoda.map_community.model.Comment;
 import com.bulmansoda.map_community.model.Like;
@@ -28,13 +30,16 @@ public class CenterMarkerService {
 
     public InsideCenterMarkerResponse openCenterMarker(OpenCenterMarkerRequest request) {
         long userId = request.getUserId();
-        CenterMarker center = centerMarkerRepository.findById(request.getCenterMarkerId()).orElseThrow();
+        CenterMarker center = centerMarkerRepository.findById(request.getCenterMarkerId())
+                .orElseThrow(() -> new CenterMarkerNotFoundException(request.getCenterMarkerId()));
         return new InsideCenterMarkerResponse(userId, center);
     }
 
     public long likeCenterMarker(LikeRequest request) {
-        User user = userRepository.findById(request.getUserId()).orElseThrow();
-        CenterMarker center = centerMarkerRepository.findById(request.getCenterMarkerId()).orElseThrow();
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new UserNotFoundException(request.getUserId()));
+        CenterMarker center = centerMarkerRepository.findById(request.getCenterMarkerId())
+                .orElseThrow(() -> new CenterMarkerNotFoundException(request.getCenterMarkerId()));
         Like like = new Like();
         like.setUser(user);
         like.setCenterMarker(center);
@@ -44,8 +49,10 @@ public class CenterMarkerService {
     }
 
     public long commentCenterMarker(CommentRequest request) {
-        User user = userRepository.findById(request.getUserId()).orElseThrow();
-        CenterMarker center = centerMarkerRepository.findById(request.getCenterMarkerId()).orElseThrow();
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new UserNotFoundException(request.getUserId()));
+        CenterMarker center = centerMarkerRepository.findById(request.getCenterMarkerId())
+                .orElseThrow(() -> new CenterMarkerNotFoundException(request.getCenterMarkerId()));
         Comment comment = new Comment();
         comment.setUser(user);
         comment.setCenterMarker(center);
@@ -53,5 +60,9 @@ public class CenterMarkerService {
         commentRepository.save(comment);
 
         return comment.getId();
+    }
+
+    public void deleteComment(long commentId) {
+        commentRepository.deleteById(commentId);
     }
 }

@@ -2,6 +2,7 @@ package com.bulmansoda.map_community.service;
 
 import com.bulmansoda.map_community.dto.map_service.CenterMarkerResponse;
 import com.bulmansoda.map_community.dto.map_service.MarkerResponse;
+import com.bulmansoda.map_community.exception.CenterMarkerNotFoundException;
 import com.bulmansoda.map_community.model.CenterMarker;
 import com.bulmansoda.map_community.model.Marker;
 import com.bulmansoda.map_community.repository.CenterMarkerRepository;
@@ -33,7 +34,8 @@ public class MapService {
     }
 
     public void problemSolved(long centerId) {
-        CenterMarker center = centerMarkerRepository.findById(centerId).orElseThrow();
+        CenterMarker center = centerMarkerRepository.findById(centerId)
+                .orElseThrow(() -> new CenterMarkerNotFoundException(centerId));
         markerRepository.deleteAllByCenterMarker(center);
         centerMarkerRepository.delete(center);
     }
