@@ -13,10 +13,15 @@ import org.springframework.context.annotation.Configuration;
 public class SpringConfig {
 
     private final UserRepository userRepository;
+
     private final MarkerRepository markerRepository;
+
     private final CenterMarkerRepository centerMarkerRepository;
+
     private final LikeRepository likeRepository;
+
     private final CommentRepository commentRepository;
+
     private final AiClusteringService aiClusteringService; // AI 서비스 의존성 추가
 
     @Autowired
@@ -49,8 +54,4 @@ public class SpringConfig {
     public MapService mapService() {
         return new MapService(markerRepository, centerMarkerRepository);
     }
-
-    // 참고: AiClusteringService, OpenAIClient, PromptBuilder, ObjectMapper는
-    // 각각 @Service, @Component 어노테이션이 있어 Spring이 자동으로 Bean으로 관리하므로
-    // 이 설정 파일에 별도의 @Bean 메서드를 만들 필요가 없습니다.
 }

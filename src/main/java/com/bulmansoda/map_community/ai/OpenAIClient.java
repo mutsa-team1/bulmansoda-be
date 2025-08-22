@@ -9,10 +9,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Map;
 
 @Component // 스프링이 관리하는 부품으로 등록
 public class OpenAIClient {

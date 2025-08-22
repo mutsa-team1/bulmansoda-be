@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-@Service // 서비스 로직 선언
+@Service
 public class AiClusteringService {
 
     private final OpenAIClient openAIClient; // AI API 통신 클라이언트
@@ -70,7 +70,7 @@ public class AiClusteringService {
         String keyword1 = contentWords.length > 0 ? contentWords[0] : "이벤트";
         String keyword2 = contentWords.length > 1 ? contentWords[1] : "상세정보";
         String keyword3 = "확인필요"; // 고정 키워드
-        fallbackResponse.setKeywords(List.of(keyword1, keyword2, keyword3));
+        fallbackResponse.setKeywords(new ArrayList<>(Arrays.asList(keyword1, keyword2, keyword3)));
 
         return fallbackResponse; // 비상용 응답 반환
     }
