@@ -2,9 +2,13 @@ package com.bulmansoda.map_community.dto.center_marker_service;
 
 import com.bulmansoda.map_community.model.CenterMarker;
 import com.bulmansoda.map_community.model.Like;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
+@Setter
+@Getter
 public class InsideCenterMarkerResponse {
 
     private long likeCount;
@@ -26,27 +30,4 @@ public class InsideCenterMarkerResponse {
 
     }
 
-    public long getLikeCount() {
-        return likeCount;
-    }
-
-    public void setLikeCount(long likeCount) {
-        this.likeCount = likeCount;
-    }
-
-    public boolean isLiked() {
-        return isLiked;
-    }
-
-    public void setLiked(boolean liked) {
-        isLiked = liked;
-    }
-
-    public List<CommentResponse> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<CommentResponse> comments) {
-        this.comments = comments;
-    }
 }

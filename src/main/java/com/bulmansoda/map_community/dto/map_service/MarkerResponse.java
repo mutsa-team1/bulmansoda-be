@@ -1,7 +1,11 @@
 package com.bulmansoda.map_community.dto.map_service;
 
 import com.bulmansoda.map_community.model.Marker;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 public class MarkerResponse {
 
     private long markerId;
@@ -22,43 +26,4 @@ public class MarkerResponse {
         this.content = marker.getContent();
     }
 
-    public long getMarkerId() {
-        return markerId;
-    }
-
-    public void setMarkerId(long markerId) {
-        this.markerId = markerId;
-    }
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
 }

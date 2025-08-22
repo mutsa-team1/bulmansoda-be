@@ -3,6 +3,7 @@ package com.bulmansoda.map_community.controller;
 import com.bulmansoda.map_community.dto.user_service.ChangeNameRequest;
 import com.bulmansoda.map_community.dto.user_service.CreateUserRequest;
 import com.bulmansoda.map_community.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public long join(@RequestBody CreateUserRequest request) {
+    public long join(@Valid @RequestBody CreateUserRequest request) {
         return userService.createUser(request);
     }
 
@@ -27,7 +28,7 @@ public class UserController {
     }
 
     @PutMapping("/name")
-    public void changeName(@RequestBody ChangeNameRequest request) {
+    public void changeName(@Valid @RequestBody ChangeNameRequest request) {
         userService.changeName(request);
     }
 

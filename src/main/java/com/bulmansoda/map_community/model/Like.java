@@ -1,7 +1,11 @@
 package com.bulmansoda.map_community.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "likes")
 public class Like {
@@ -18,27 +22,4 @@ public class Like {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public CenterMarker getCenterMarker() {
-        return centerMarker;
-    }
-
-    public void setCenterMarker(CenterMarker centerMarker) {
-        this.centerMarker = centerMarker;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 }

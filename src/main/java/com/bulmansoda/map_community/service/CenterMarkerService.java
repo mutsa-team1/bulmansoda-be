@@ -2,6 +2,7 @@ package com.bulmansoda.map_community.service;
 
 import com.bulmansoda.map_community.dto.center_marker_service.*;
 import com.bulmansoda.map_community.exception.CenterMarkerNotFoundException;
+import com.bulmansoda.map_community.exception.DuplicateLikeException;
 import com.bulmansoda.map_community.exception.UserNotFoundException;
 import com.bulmansoda.map_community.model.CenterMarker;
 import com.bulmansoda.map_community.model.Comment;
@@ -40,6 +41,11 @@ public class CenterMarkerService {
                 .orElseThrow(() -> new UserNotFoundException(request.getUserId()));
         CenterMarker center = centerMarkerRepository.findById(request.getCenterMarkerId())
                 .orElseThrow(() -> new CenterMarkerNotFoundException(request.getCenterMarkerId()));
+
+        if (likeRepository.findByUserAndCenterMarker(user,center).isPresent()) {
+            throw new DuplicateLikeException("User has already liked it");
+        }
+
         Like like = new Like();
         like.setUser(user);
         like.setCenterMarker(center);

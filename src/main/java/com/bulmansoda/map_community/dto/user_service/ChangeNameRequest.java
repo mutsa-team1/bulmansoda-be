@@ -1,24 +1,17 @@
 package com.bulmansoda.map_community.dto.user_service;
 
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class ChangeNameRequest {
 
+    @NotNull(message = "User id is required")
     private long userId;
 
+    @NotNull(message = "New name is required")
     private String name;
 
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

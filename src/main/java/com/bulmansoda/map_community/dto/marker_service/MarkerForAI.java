@@ -1,7 +1,11 @@
 package com.bulmansoda.map_community.dto.marker_service;
 
 import com.bulmansoda.map_community.model.Marker;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 public class MarkerForAI {
 
     private double latitude;
@@ -16,27 +20,4 @@ public class MarkerForAI {
         this.content = marker.getContent();
     }
 
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
 }

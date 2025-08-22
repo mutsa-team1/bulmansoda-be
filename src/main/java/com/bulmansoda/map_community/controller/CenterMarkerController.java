@@ -5,6 +5,7 @@ import com.bulmansoda.map_community.dto.center_marker_service.InsideCenterMarker
 import com.bulmansoda.map_community.dto.center_marker_service.LikeRequest;
 import com.bulmansoda.map_community.dto.center_marker_service.OpenCenterMarkerRequest;
 import com.bulmansoda.map_community.service.CenterMarkerService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,17 +21,17 @@ public class CenterMarkerController {
     }
 
     @GetMapping("/open")
-    public InsideCenterMarkerResponse openCenter(@RequestBody OpenCenterMarkerRequest request) {
+    public InsideCenterMarkerResponse openCenter(@Valid @RequestBody OpenCenterMarkerRequest request) {
         return centerMarkerService.openCenterMarker(request);
     }
 
     @PostMapping("/like")
-    public long like(@RequestBody LikeRequest request) {
+    public long like(@Valid @RequestBody LikeRequest request) {
         return centerMarkerService.likeCenterMarker(request);
     }
 
     @PostMapping("/comment/create")
-    public long createComment(@RequestBody CommentRequest request) {
+    public long createComment(@Valid @RequestBody CommentRequest request) {
         return centerMarkerService.commentCenterMarker(request);
     }
 

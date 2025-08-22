@@ -2,6 +2,7 @@ package com.bulmansoda.map_community.controller;
 
 import com.bulmansoda.map_community.dto.marker_service.CreateMarkerRequest;
 import com.bulmansoda.map_community.service.MarkerService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class MarkerController {
     }
 
     @PostMapping("/create")
-    public long marked(@RequestBody CreateMarkerRequest request) {
+    public long marked(@Valid @RequestBody CreateMarkerRequest request) {
         return markerService.createMarker(request);
     }
 

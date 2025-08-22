@@ -2,10 +2,14 @@ package com.bulmansoda.map_community.dto.marker_service;
 
 import com.bulmansoda.map_community.model.CenterMarker;
 import com.bulmansoda.map_community.model.Marker;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.Map;
 
+@Setter
+@Getter
 public class CenterMarkerForAI {
 
     private long id;
@@ -31,43 +35,4 @@ public class CenterMarkerForAI {
         this.keywords = center.getKeywords();
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-    public List<Map<String, Map<Double, Double>>> getMarkers() {
-        return markers;
-    }
-
-    public void setMarkers(List<Map<String, Map<Double, Double>>> markers) {
-        this.markers = markers;
-    }
-
-    public List<String> getKeywords() {
-        return keywords;
-    }
-
-    public void setKeywords(List<String> keywords) {
-        this.keywords = keywords;
-    }
 }
