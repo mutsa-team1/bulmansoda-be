@@ -7,10 +7,13 @@ import com.bulmansoda.map_community.model.CenterMarker;
 import com.bulmansoda.map_community.model.Marker;
 import com.bulmansoda.map_community.repository.CenterMarkerRepository;
 import com.bulmansoda.map_community.repository.MarkerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
 @Transactional
 public class MapService {
 
@@ -18,6 +21,7 @@ public class MapService {
 
     private final CenterMarkerRepository centerMarkerRepository;
 
+    @Autowired
     public MapService(MarkerRepository markerRepository, CenterMarkerRepository centerMarkerRepository) {
         this.markerRepository = markerRepository;
         this.centerMarkerRepository = centerMarkerRepository;

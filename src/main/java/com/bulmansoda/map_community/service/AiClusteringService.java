@@ -2,11 +2,13 @@ package com.bulmansoda.map_community.service;
 
 import com.bulmansoda.map_community.ai.OpenAIClient;
 import com.bulmansoda.map_community.ai.PromptBuilder;
-import com.bulmansoda.map_community.dto.cluster_center.GptRequest;
-import com.bulmansoda.map_community.dto.cluster_center.GptResponse;
+import com.bulmansoda.map_community.dto.ai.GptRequest;
+import com.bulmansoda.map_community.dto.ai.GptResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 

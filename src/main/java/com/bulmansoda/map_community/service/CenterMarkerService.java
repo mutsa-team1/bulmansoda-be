@@ -9,8 +9,11 @@ import com.bulmansoda.map_community.model.Comment;
 import com.bulmansoda.map_community.model.Like;
 import com.bulmansoda.map_community.model.User;
 import com.bulmansoda.map_community.repository.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Service
 @Transactional
 public class CenterMarkerService {
 
@@ -22,6 +25,7 @@ public class CenterMarkerService {
 
     private final CommentRepository commentRepository;
 
+    @Autowired
     public CenterMarkerService(UserRepository userRepository, CenterMarkerRepository centerMarkerRepository, LikeRepository likeRepository, CommentRepository commentRepository) {
         this.userRepository = userRepository;
         this.centerMarkerRepository = centerMarkerRepository;
