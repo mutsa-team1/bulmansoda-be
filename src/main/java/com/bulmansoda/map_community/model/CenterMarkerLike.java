@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Entity
 @Table(name = "likes")
-public class Like {
+public class CenterMarkerLike {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

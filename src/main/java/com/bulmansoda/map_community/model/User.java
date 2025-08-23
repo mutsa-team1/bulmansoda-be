@@ -28,7 +28,7 @@ public class User {
     private List<Marker> markers;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Like> likes;
+    private List<CenterMarkerLike> centerMarkerLikes;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;

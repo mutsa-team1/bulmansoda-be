@@ -1,10 +1,7 @@
 package com.bulmansoda.map_community;
 
-import com.bulmansoda.map_community.ai.OpenAIClient;
-import com.bulmansoda.map_community.ai.PromptBuilder;
 import com.bulmansoda.map_community.repository.*;
 import com.bulmansoda.map_community.service.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,19 +15,22 @@ public class SpringConfig {
 
     private final CenterMarkerRepository centerMarkerRepository;
 
-    private final LikeRepository likeRepository;
+    private final CenterMarkerLikeRepository centerMarkerLikeRepository;
 
     private final CommentRepository commentRepository;
+
+    private final CommentLikeRepository commentLikeRepository;
 
     private final AiClusteringService aiClusteringService; // AI 서비스 의존성 추가
 
     @Autowired
-    public SpringConfig(UserRepository userRepository, MarkerRepository markerRepository, CenterMarkerRepository centerMarkerRepository, LikeRepository likeRepository, CommentRepository commentRepository, AiClusteringService aiClusteringService) {
+    public SpringConfig(UserRepository userRepository, MarkerRepository markerRepository, CenterMarkerRepository centerMarkerRepository, CenterMarkerLikeRepository centerMarkerLikeRepository, CommentRepository commentRepository, CommentLikeRepository commentLikeRepository, AiClusteringService aiClusteringService) {
         this.userRepository = userRepository;
         this.markerRepository = markerRepository;
         this.centerMarkerRepository = centerMarkerRepository;
-        this.likeRepository = likeRepository;
+        this.centerMarkerLikeRepository = centerMarkerLikeRepository;
         this.commentRepository = commentRepository;
+        this.commentLikeRepository = commentLikeRepository;
         this.aiClusteringService = aiClusteringService; // 생성자를 통해 주입
     }
 
@@ -47,7 +47,7 @@ public class SpringConfig {
 
     @Bean
     public CenterMarkerService centerMarkerService() {
-        return new CenterMarkerService(userRepository, centerMarkerRepository, likeRepository, commentRepository);
+        return new CenterMarkerService(userRepository, centerMarkerRepository, centerMarkerLikeRepository, commentRepository, commentLikeRepository);
     }
 
     @Bean

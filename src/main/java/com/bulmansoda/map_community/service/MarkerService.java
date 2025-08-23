@@ -1,7 +1,7 @@
 package com.bulmansoda.map_community.service;
 
-import com.bulmansoda.map_community.dto.cluster_center.GptRequest;
-import com.bulmansoda.map_community.dto.cluster_center.GptResponse;
+import com.bulmansoda.map_community.dto.ai.GptRequest;
+import com.bulmansoda.map_community.dto.ai.GptResponse;
 import com.bulmansoda.map_community.dto.marker_service.CreateMarkerRequest;
 import com.bulmansoda.map_community.exception.CenterMarkerNotFoundException;
 import com.bulmansoda.map_community.exception.MarkerNotFoundException;

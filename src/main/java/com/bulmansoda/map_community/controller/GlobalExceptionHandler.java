@@ -1,9 +1,6 @@
 package com.bulmansoda.map_community.controller;
 
-import com.bulmansoda.map_community.exception.CenterMarkerNotFoundException;
-import com.bulmansoda.map_community.exception.DuplicateLikeException;
-import com.bulmansoda.map_community.exception.MarkerNotFoundException;
-import com.bulmansoda.map_community.exception.UserNotFoundException;
+import com.bulmansoda.map_community.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +44,17 @@ public class GlobalExceptionHandler {
         body.put("timestamp", LocalDateTime.now());
         body.put("status", HttpStatus.NOT_FOUND.value());
         body.put("error", "CenterMarker Not Found");
+        body.put("message", e.getMessage());
+
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(CommentNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleCommentNotFound(CommentNotFoundException e) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.NOT_FOUND.value());
+        body.put("error", "Comment Not Found");
         body.put("message", e.getMessage());
 
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);

@@ -11,12 +11,6 @@ public class GptRequest {
         private double latitude;
         private double longitude;
         private String content;
-
-        public MarkerForAI(double latitude, double longitude, String content) {
-            this.latitude = latitude;
-            this.longitude = longitude;
-            this.content = content;
-        }
     }
 
     /**
@@ -29,12 +23,6 @@ public class GptRequest {
         private double longitude;        // 현재 중심 경도
         private List<String> keywords;   // 3개의 핵심 요약 키워드
 
-        public CenterMarkerForAI(Long id, double latitude, double longitude, List<String> keywords) {
-            this.id = id;
-            this.latitude = latitude;
-            this.longitude = longitude;
-            this.keywords = keywords;
-        }
     }
 
 }

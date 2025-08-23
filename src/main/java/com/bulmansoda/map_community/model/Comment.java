@@ -6,6 +6,8 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -27,6 +29,9 @@ public class Comment {
 
     @Column(nullable = false)
     private String content;
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CommentLike> commentLikes = new ArrayList<>();
 
     @CreationTimestamp
     private Timestamp createdAt;

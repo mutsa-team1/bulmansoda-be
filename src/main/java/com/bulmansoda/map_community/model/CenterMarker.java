@@ -32,7 +32,7 @@ public class CenterMarker {
     private List<Marker> markers;
 
     @OneToMany(mappedBy = "centerMarker", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Like> likes = new ArrayList<>();
+    private List<CenterMarkerLike> centerMarkerLikes = new ArrayList<>();
 
     @OneToMany(mappedBy = "centerMarker", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();

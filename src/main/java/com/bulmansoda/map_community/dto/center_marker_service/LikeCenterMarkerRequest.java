@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class LikeRequest {
+public class LikeCenterMarkerRequest {
 
     @NotNull(message = "User id is required")
     private long userId;
@@ -14,7 +14,7 @@ public class LikeRequest {
     @NotNull(message = "Center Marker id is required")
     private long centerMarkerId;
 
-    public LikeRequest(long userId, long centerMarkerId) {
+    public LikeCenterMarkerRequest(long userId, long centerMarkerId) {
         this.userId = userId;
         this.centerMarkerId = centerMarkerId;
     }

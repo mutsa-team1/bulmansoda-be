@@ -2,12 +2,10 @@ package com.bulmansoda.map_community.service;
 
 import com.bulmansoda.map_community.dto.center_marker_service.*;
 import com.bulmansoda.map_community.exception.CenterMarkerNotFoundException;
+import com.bulmansoda.map_community.exception.CommentNotFoundException;
 import com.bulmansoda.map_community.exception.DuplicateLikeException;
 import com.bulmansoda.map_community.exception.UserNotFoundException;
-import com.bulmansoda.map_community.model.CenterMarker;
-import com.bulmansoda.map_community.model.Comment;
-import com.bulmansoda.map_community.model.Like;
-import com.bulmansoda.map_community.model.User;
+import com.bulmansoda.map_community.model.*;
 import com.bulmansoda.map_community.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,16 +19,19 @@ public class CenterMarkerService {
 
     private final CenterMarkerRepository centerMarkerRepository;
 
-    private final LikeRepository likeRepository;
+    private final CenterMarkerLikeRepository centerMarkerLikeRepository;
 
     private final CommentRepository commentRepository;
 
+    private final CommentLikeRepository commentLikeRepository;
+
     @Autowired
-    public CenterMarkerService(UserRepository userRepository, CenterMarkerRepository centerMarkerRepository, LikeRepository likeRepository, CommentRepository commentRepository) {
+    public CenterMarkerService(UserRepository userRepository, CenterMarkerRepository centerMarkerRepository, CenterMarkerLikeRepository centerMarkerLikeRepository, CommentRepository commentRepository, CommentLikeRepository commentLikeRepository) {
         this.userRepository = userRepository;
         this.centerMarkerRepository = centerMarkerRepository;
-        this.likeRepository = likeRepository;
+        this.centerMarkerLikeRepository = centerMarkerLikeRepository;
         this.commentRepository = commentRepository;
+        this.commentLikeRepository = commentLikeRepository;
     }
 
     public InsideCenterMarkerResponse openCenterMarker(OpenCenterMarkerRequest request) {
@@ -40,22 +41,22 @@ public class CenterMarkerService {
         return new InsideCenterMarkerResponse(userId, center);
     }
 
-    public long likeCenterMarker(LikeRequest request) {
+    public long likeCenterMarker(LikeCenterMarkerRequest request) {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new UserNotFoundException(request.getUserId()));
         CenterMarker center = centerMarkerRepository.findById(request.getCenterMarkerId())
                 .orElseThrow(() -> new CenterMarkerNotFoundException(request.getCenterMarkerId()));
 
-        if (likeRepository.findByUserAndCenterMarker(user,center).isPresent()) {
-            throw new DuplicateLikeException("User has already liked it");
+        if (centerMarkerLikeRepository.findByUserAndCenterMarker(user,center).isPresent()) {
+            throw new DuplicateLikeException("User has already liked this center marker");
         }
 
-        Like like = new Like();
-        like.setUser(user);
-        like.setCenterMarker(center);
-        likeRepository.save(like);
+        CenterMarkerLike centerMarkerLike = new CenterMarkerLike();
+        centerMarkerLike.setUser(user);
+        centerMarkerLike.setCenterMarker(center);
+        centerMarkerLikeRepository.save(centerMarkerLike);
 
-        return like.getId();
+        return centerMarkerLike.getId();
     }
 
     public long commentCenterMarker(CommentRequest request) {
@@ -70,6 +71,24 @@ public class CenterMarkerService {
         commentRepository.save(comment);
 
         return comment.getId();
+    }
+
+    public long likeComment(LikeCommentRequest likeCommentRequest) {
+        User user = userRepository.findById(likeCommentRequest.getUserId())
+                .orElseThrow(() -> new UserNotFoundException(likeCommentRequest.getUserId()));
+        Comment comment = commentRepository.findById(likeCommentRequest.getCommentId())
+                .orElseThrow(() -> new CommentNotFoundException(likeCommentRequest.getCommentId()));
+
+        if(commentLikeRepository.findByUserAndComment(user, comment).isPresent()) {
+         throw new DuplicateLikeException("User has already liked this comment");
+        }
+
+        CommentLike commentLike = new CommentLike();
+        commentLike.setUser(user);
+        commentLike.setComment(comment);
+        commentLikeRepository.save(commentLike);
+
+        return commentLike.getId();
     }
 
     public void deleteComment(long commentId) {
