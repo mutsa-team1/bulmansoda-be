@@ -28,7 +28,7 @@ public class CommentResponse {
     public CommentResponse(long userId, Comment comment) {
         this.commentId = comment.getId();
         this.name = comment.getUser().getName();
-        this.userId = comment.getId();
+        this.userId = comment.getUser().getId();
         this.content = comment.getContent();
         this.likeCount = comment.getCommentLikes().size();
         this.isLiked = false;

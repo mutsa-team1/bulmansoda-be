@@ -31,7 +31,6 @@ public class MarkerService {
     }
 
     public long createMarker(CreateMarkerRequest request) {
-        // 1. 새로운 마커 객체 생성
         Marker marker = new Marker();
         marker.setLatitude(request.getLatitude());
         marker.setLongitude(request.getLongitude());
@@ -40,42 +39,36 @@ public class MarkerService {
         marker.setUser(user);
         marker.setContent(request.getContent());
 
-        // 2. AI 클러스터링 요청을 위한 데이터 준비
         GptRequest.MarkerForAI newMarkerForAI = new GptRequest.MarkerForAI();
         newMarkerForAI.setLatitude(request.getLatitude());
         newMarkerForAI.setLongitude(request.getLongitude());
         newMarkerForAI.setContent(request.getContent());
 
-        List<GptRequest.CenterMarkerForAI> existingCentersForAI = centerMarkerRepository.findAll().stream().map(center -> {
-            GptRequest.CenterMarkerForAI centerForAI = new GptRequest.CenterMarkerForAI();
-            centerForAI.setId(center.getId());
-            centerForAI.setLatitude(center.getLatitude());
-            centerForAI.setLongitude(center.getLongitude());
-            centerForAI.setKeywords(center.getKeywords());
-            return centerForAI;
-        }).collect(Collectors.toList());
+        List<GptRequest.CenterMarkerForAI> existingCentersForAI = centerMarkerRepository.findAll().stream()
+                .map(center -> {
+                    GptRequest.CenterMarkerForAI centerForAI = new GptRequest.CenterMarkerForAI();
+                    centerForAI.setId(center.getId());
+                    centerForAI.setLatitude(center.getLatitude());
+                    centerForAI.setLongitude(center.getLongitude());
+                    centerForAI.setKeywords(center.getKeywords());
+                    return centerForAI;
+                }).collect(Collectors.toList());
 
-        // 3. AI 서비스 호출
         GptResponse aiResponse = aiClusteringService.clusterOrIntegrate(newMarkerForAI, existingCentersForAI);
 
-        // 4. AI 응답에 따른 처리
         CenterMarker targetCenter;
         if ("UPDATE".equals(aiResponse.getAction())) {
-            // 기존 클러스터 업데이트
             targetCenter = centerMarkerRepository.findById(aiResponse.getId())
                     .orElseThrow(() -> new CenterMarkerNotFoundException(aiResponse.getId()));
-        } else { // "CREATE"
-            // 새 클러스터 생성
+        } else {
             targetCenter = new CenterMarker();
         }
 
-        // 위도, 경도, 키워드 업데이트 또는 설정
         targetCenter.setLatitude(aiResponse.getLatitude());
         targetCenter.setLongitude(aiResponse.getLongitude());
         targetCenter.setKeywords(aiResponse.getKeywords());
         centerMarkerRepository.save(targetCenter);
 
-        // 새 마커를 대상 클러스터에 연결하고 저장
         marker.setCenterMarker(targetCenter);
         markerRepository.save(marker);
 

@@ -41,7 +41,6 @@ public class SpringConfig {
 
     @Bean
     public MarkerService markerService() {
-        // MarkerService를 생성할 때 AiClusteringService를 전달합니다.
         return new MarkerService(markerRepository, userRepository, centerMarkerRepository, aiClusteringService);
     }
 

@@ -34,10 +34,9 @@ public class CenterMarkerService {
         this.commentLikeRepository = commentLikeRepository;
     }
 
-    public InsideCenterMarkerResponse openCenterMarker(OpenCenterMarkerRequest request) {
-        long userId = request.getUserId();
-        CenterMarker center = centerMarkerRepository.findById(request.getCenterMarkerId())
-                .orElseThrow(() -> new CenterMarkerNotFoundException(request.getCenterMarkerId()));
+    public InsideCenterMarkerResponse openCenterMarker(long userId, long centerMarkerId) {
+        CenterMarker center = centerMarkerRepository.findById(centerMarkerId)
+                .orElseThrow(() -> new CenterMarkerNotFoundException(centerMarkerId));
         return new InsideCenterMarkerResponse(userId, center);
     }
 

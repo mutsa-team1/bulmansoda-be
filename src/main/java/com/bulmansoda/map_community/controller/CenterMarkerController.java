@@ -18,8 +18,8 @@ public class CenterMarkerController {
     }
 
     @GetMapping("/open")
-    public InsideCenterMarkerResponse openCenter(@Valid @RequestBody OpenCenterMarkerRequest request) {
-        return centerMarkerService.openCenterMarker(request);
+    public InsideCenterMarkerResponse openCenter(@RequestParam long userId, @RequestParam long centerMarkerId) {
+        return centerMarkerService.openCenterMarker(userId, centerMarkerId);
     }
 
     @PostMapping("/like")

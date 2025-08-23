@@ -6,11 +6,11 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-@JsonInclude(JsonInclude.Include.NON_NULL) // null인 필드는 JSON 변환 시 제외
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class GptResponse {
-    private String action; // "UPDATE" or "CREATE"
-    private Long id; // action이 "UPDATE"일 때, 해당하는 통합마커의 PK
+    private String action;
+    private Long id;
     private Double latitude;
     private Double longitude;
-    private List<String> keywords; // 3개의 키워드
+    private List<String> keywords;
 }

@@ -12,9 +12,6 @@ public class PromptBuilder {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    /**
-     * 분류 또는 생성을 위한 시스템 프롬프트
-     */
     public String system() {
         return "You are an intelligent geospatial clustering AI. Your task is to analyze a new individual marker and a list of existing cluster markers. " +
                 "You must decide whether the new marker belongs to one of the existing clusters or if it should form a new cluster. " +
@@ -22,9 +19,6 @@ public class PromptBuilder {
                 "Always follow the specified keyword hierarchy: Keyword 1 is the main theme, Keywords 2 and 3 are specific details.";
     }
 
-    /**
-     * 분류 또는 생성을 위한 사용자 프롬프트
-     */
     public String user(GptRequest.MarkerForAI newMarker, List<GptRequest.CenterMarkerForAI> existingCenters) {
         String newMarkerJson;
         String existingCentersJson;
@@ -54,9 +48,6 @@ public class PromptBuilder {
                 "Please provide your response in a single, clean JSON object according to the schema.";
     }
 
-    /**
-     * 분류 또는 생성을 위한 JSON 스키마
-     */
     public String jsonSchema() {
         return """
                  {
