@@ -19,6 +19,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+@Service
 @Transactional
 public class MapService {
 
@@ -27,6 +28,7 @@ public class MapService {
 
     private final CenterMarkerRepository centerMarkerRepository;
 
+    @Autowired
     public MapService(MarkerRepository markerRepository, CenterMarkerRepository centerMarkerRepository) {
         this.markerRepository = markerRepository;
         this.centerMarkerRepository = centerMarkerRepository;

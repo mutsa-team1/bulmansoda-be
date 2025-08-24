@@ -5,6 +5,7 @@ import com.bulmansoda.map_community.ai.PromptBuilder;
 import com.bulmansoda.map_community.dto.ai.GptRequest;
 import com.bulmansoda.map_community.dto.ai.GptResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class AiClusteringService {
     private final PromptBuilder promptBuilder;
     private final ObjectMapper objectMapper;
 
+    @Autowired
     public AiClusteringService(OpenAIClient openAIClient, PromptBuilder promptBuilder, ObjectMapper objectMapper) {
         this.openAIClient = openAIClient;
         this.promptBuilder = promptBuilder;

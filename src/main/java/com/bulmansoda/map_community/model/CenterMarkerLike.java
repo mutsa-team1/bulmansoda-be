@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-@Table(name = "likes")
+@Table(name = "center_marker_likes")
 public class CenterMarkerLike {
 
     @Id

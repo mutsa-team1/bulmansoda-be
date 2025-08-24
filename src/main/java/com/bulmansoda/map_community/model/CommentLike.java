@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-@Table(name = "likes")
+@Table(name = "comment_likes")
 public class CommentLike {
 
     @Id

@@ -11,11 +11,14 @@ import com.bulmansoda.map_community.model.User;
 import com.bulmansoda.map_community.repository.CenterMarkerRepository;
 import com.bulmansoda.map_community.repository.MarkerRepository;
 import com.bulmansoda.map_community.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 @Transactional
 public class MarkerService {
     private final MarkerRepository markerRepository;
@@ -23,6 +26,7 @@ public class MarkerService {
     private final CenterMarkerRepository centerMarkerRepository;
     private final AiClusteringService aiClusteringService; // AI 서비스 주입
 
+    @Autowired
     public MarkerService(MarkerRepository markerRepository, UserRepository userRepository, CenterMarkerRepository centerMarkerRepository, AiClusteringService aiClusteringService) {
         this.markerRepository = markerRepository;
         this.userRepository = userRepository;
@@ -44,7 +48,17 @@ public class MarkerService {
         newMarkerForAI.setLongitude(request.getLongitude());
         newMarkerForAI.setContent(request.getContent());
 
-        List<GptRequest.CenterMarkerForAI> existingCentersForAI = centerMarkerRepository.findAll().stream()
+        double lat = request.getLatitude();
+        double lng = request.getLongitude();
+        double delta = 0.1;
+
+        List<GptRequest.CenterMarkerForAI> existingCentersForAI = centerMarkerRepository.findCenterMarkersInArea(
+                lat - delta,
+                lat + delta,
+                lng - delta,
+                lng + delta
+                )
+                .stream()
                 .map(center -> {
                     GptRequest.CenterMarkerForAI centerForAI = new GptRequest.CenterMarkerForAI();
                     centerForAI.setId(center.getId());
