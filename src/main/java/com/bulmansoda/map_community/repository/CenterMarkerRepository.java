@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public interface CenterMarkerRepository extends JpaRepository<CenterMarker, Long> {
@@ -17,4 +18,6 @@ public interface CenterMarkerRepository extends JpaRepository<CenterMarker, Long
             @Param("minLng") double minLng,
             @Param("maxLng") double maxLng
     );
+
+    List<CenterMarker> findByUpdatedAtBefore(Timestamp timestamp);
 }

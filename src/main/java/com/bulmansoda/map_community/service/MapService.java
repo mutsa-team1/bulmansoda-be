@@ -7,21 +7,26 @@ import com.bulmansoda.map_community.model.CenterMarker;
 import com.bulmansoda.map_community.model.Marker;
 import com.bulmansoda.map_community.repository.CenterMarkerRepository;
 import com.bulmansoda.map_community.repository.MarkerRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-@Service
 @Transactional
 public class MapService {
 
+    private static final Logger log = LogManager.getLogger(MapService.class);
     private final MarkerRepository markerRepository;
 
     private final CenterMarkerRepository centerMarkerRepository;
 
-    @Autowired
     public MapService(MarkerRepository markerRepository, CenterMarkerRepository centerMarkerRepository) {
         this.markerRepository = markerRepository;
         this.centerMarkerRepository = centerMarkerRepository;
@@ -47,5 +52,22 @@ public class MapService {
     public void refreshMap() {
         markerRepository.deleteAll();
         centerMarkerRepository.deleteAll();
+    }
+
+    @Scheduled(fixedRate = 3600000)
+    public void cleanUpOldCenterMarkers() {
+        log.info("Running scheduled job to clean up old center markers...");
+
+        Timestamp fiveHoursAgo = Timestamp.from(Instant.now().minus(5, ChronoUnit.HOURS));
+        List<CenterMarker> oldCenterMarkers = centerMarkerRepository.findByUpdatedAtBefore(fiveHoursAgo);
+
+        if(oldCenterMarkers.isEmpty()) {
+            log.info("No old center markers to clean up.");
+            return;
+        }
+
+        log.info("Found {} old center markers to delete. Deleting now...", oldCenterMarkers);
+        centerMarkerRepository.deleteAll(oldCenterMarkers);
+        log.info("Successfully deleted old center markers.");
     }
 }

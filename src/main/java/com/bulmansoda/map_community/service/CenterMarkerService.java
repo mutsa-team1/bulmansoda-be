@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+
+
 @Service
 @Transactional
 public class CenterMarkerService {
@@ -55,6 +58,9 @@ public class CenterMarkerService {
         centerMarkerLike.setCenterMarker(center);
         centerMarkerLikeRepository.save(centerMarkerLike);
 
+        center.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        centerMarkerRepository.save(center);
+
         return centerMarkerLike.getId();
     }
 
@@ -63,11 +69,15 @@ public class CenterMarkerService {
                 .orElseThrow(() -> new UserNotFoundException(request.getUserId()));
         CenterMarker center = centerMarkerRepository.findById(request.getCenterMarkerId())
                 .orElseThrow(() -> new CenterMarkerNotFoundException(request.getCenterMarkerId()));
+
         Comment comment = new Comment();
         comment.setUser(user);
         comment.setCenterMarker(center);
         comment.setContent(request.getContent());
         commentRepository.save(comment);
+
+        center.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        centerMarkerRepository.save(center);
 
         return comment.getId();
     }
@@ -86,6 +96,12 @@ public class CenterMarkerService {
         commentLike.setUser(user);
         commentLike.setComment(comment);
         commentLikeRepository.save(commentLike);
+
+        CenterMarker center = comment.getCenterMarker();
+        if (center != null) {
+            center.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+            centerMarkerRepository.save(center);
+        }
 
         return commentLike.getId();
     }
