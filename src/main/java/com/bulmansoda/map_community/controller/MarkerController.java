@@ -22,6 +22,16 @@ public class MarkerController {
         return markerService.createMarker(request);
     }
 
+    /*
+    @PostMapping("/create")
+    public long marked(@Valid @RequestBody CreateMarkerRequest request, Authentication authentication) {
+        Long userId = Long.valueOf(authentication.getName());
+
+        return markerService.createMarker(request, userId);
+    }
+    // remove userId in request DTO
+    */
+
     @DeleteMapping("/delete")
     public void unmarked(@RequestBody long markerId) {
         markerService.deleteMarker(markerId);
