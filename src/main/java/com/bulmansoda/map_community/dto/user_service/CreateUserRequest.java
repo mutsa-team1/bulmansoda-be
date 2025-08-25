@@ -11,6 +11,9 @@ public class CreateUserRequest {
     @NotBlank(message = "User name is required")
     private String name;
 
+    @NotBlank(message = "User phone number is required")
+    private String phoneNumber;
+
     public CreateUserRequest(String name) {
         this.name = name;
     }

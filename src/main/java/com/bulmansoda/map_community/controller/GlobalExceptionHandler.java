@@ -95,6 +95,17 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.SERVICE_UNAVAILABLE);
     }
 
+    @ExceptionHandler(WrongPasswordException.class)
+    public ResponseEntity<Map<String, Object>> handleWrongPassword(WrongPasswordException e) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.UNAUTHORIZED);
+        body.put("error", "Wrong Password");
+        body.put("message", "Password is wrong, try again.");
+
+        return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Map<String, Object>> handleRuntime(RuntimeException e) {
         Map<String, Object> body = new HashMap<>();

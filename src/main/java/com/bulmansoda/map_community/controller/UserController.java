@@ -17,6 +17,11 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/login")
+    public long login(@RequestParam String name, @RequestParam String phoneNumber) {
+        return userService.loadUser(name, phoneNumber);
+    }
+
     @PostMapping("/create")
     public long join(@Valid @RequestBody CreateUserRequest request) {
         return userService.createUser(request);
