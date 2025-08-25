@@ -96,7 +96,7 @@ public class MarkerService {
                         .orElseThrow(() -> new MarkerNotFoundException(markerId));
 
         if (marker.getUser().getId() != userId) {
-            throw new AuthorizationException("User is not authorized to delete this marker.")
+            throw new AuthorizationException("User is not authorized to delete this marker.");
         }
 
         markerRepository.deleteById(markerId);
