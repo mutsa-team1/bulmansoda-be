@@ -81,6 +81,20 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(AiProcessingException.class)
+    public ResponseEntity<Map<String, Object>> handleAiProcessingException(AiProcessingException e) {
+
+        log.error("AI Processing Error: {}", e.getMessage(), e);
+
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.SERVICE_UNAVAILABLE.value());
+        body.put("error", "AI Service Error");
+        body.put("message", "Could not process the request due to an issue with the AI service. Please try again later.");
+
+        return new ResponseEntity<>(body, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Map<String, Object>> handleRuntime(RuntimeException e) {
         Map<String, Object> body = new HashMap<>();
