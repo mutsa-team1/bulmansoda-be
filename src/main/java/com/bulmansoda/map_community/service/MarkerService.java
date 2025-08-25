@@ -90,6 +90,18 @@ public class MarkerService {
     }
 
     public void deleteMarker(long markerId) {
+        Marker marker = markerRepository.findById(markerId)
+                .orElseThrow(() -> new MarkerNotFoundException(markerId));
+        CenterMarker centerMarker = marker.getCenterMarker();
+
         markerRepository.deleteById(markerId);
+
+        if (centerMarker != null) {
+            CenterMarker updatedCenterMarker = centerMarkerRepository.findById(centerMarker.getId()).orElse(null);
+
+            if (updatedCenterMarker != null && updatedCenterMarker.getMarkers().isEmpty()) {
+                centerMarkerRepository.delete(updatedCenterMarker);
+            }
+        }
     }
 }
