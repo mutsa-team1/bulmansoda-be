@@ -16,12 +16,15 @@ public class CenterMarkerResponse {
 
     private double longitude;
 
+    private int likeCount;
+
     private List<String> keywords;
 
     public CenterMarkerResponse(CenterMarker centerMarker) {
         this.centerMarkerId = centerMarker.getId();
         this.latitude = centerMarker.getLatitude();
         this.longitude = centerMarker.getLongitude();
+        this.likeCount = centerMarker.getCenterMarkerLikes().size();
         this.keywords = centerMarker.getKeywords();
     }
 
