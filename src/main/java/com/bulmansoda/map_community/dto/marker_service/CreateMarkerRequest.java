@@ -15,9 +15,6 @@ public class CreateMarkerRequest {
     @NotNull(message = "Longitude is required")
     private double longitude;
 
-    @NotNull(message = "User id is required")
-    private long userId;
-
     @NotBlank(message = "Content is required")
     private String content;
 

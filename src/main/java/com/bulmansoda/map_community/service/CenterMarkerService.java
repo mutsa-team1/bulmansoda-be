@@ -1,10 +1,7 @@
 package com.bulmansoda.map_community.service;
 
 import com.bulmansoda.map_community.dto.center_marker_service.*;
-import com.bulmansoda.map_community.exception.CenterMarkerNotFoundException;
-import com.bulmansoda.map_community.exception.CommentNotFoundException;
-import com.bulmansoda.map_community.exception.DuplicateLikeException;
-import com.bulmansoda.map_community.exception.UserNotFoundException;
+import com.bulmansoda.map_community.exception.*;
 import com.bulmansoda.map_community.model.*;
 import com.bulmansoda.map_community.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,11 +40,11 @@ public class CenterMarkerService {
         return new InsideCenterMarkerResponse(userId, center);
     }
 
-    public long likeCenterMarker(LikeCenterMarkerRequest request) {
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new UserNotFoundException(request.getUserId()));
-        CenterMarker center = centerMarkerRepository.findById(request.getCenterMarkerId())
-                .orElseThrow(() -> new CenterMarkerNotFoundException(request.getCenterMarkerId()));
+    public long likeCenterMarker(Long userId, Long centerMarkerId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+        CenterMarker center = centerMarkerRepository.findById(centerMarkerId)
+                .orElseThrow(() -> new CenterMarkerNotFoundException(centerMarkerId));
 
         if (centerMarkerLikeRepository.findByUserAndCenterMarker(user,center).isPresent()) {
             throw new DuplicateLikeException("User has already liked this center marker");
@@ -64,9 +61,9 @@ public class CenterMarkerService {
         return centerMarkerLike.getId();
     }
 
-    public long commentCenterMarker(CommentRequest request) {
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new UserNotFoundException(request.getUserId()));
+    public long commentCenterMarker(Long userId, CommentRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
         CenterMarker center = centerMarkerRepository.findById(request.getCenterMarkerId())
                 .orElseThrow(() -> new CenterMarkerNotFoundException(request.getCenterMarkerId()));
 
@@ -82,11 +79,11 @@ public class CenterMarkerService {
         return comment.getId();
     }
 
-    public long likeComment(LikeCommentRequest likeCommentRequest) {
-        User user = userRepository.findById(likeCommentRequest.getUserId())
-                .orElseThrow(() -> new UserNotFoundException(likeCommentRequest.getUserId()));
-        Comment comment = commentRepository.findById(likeCommentRequest.getCommentId())
-                .orElseThrow(() -> new CommentNotFoundException(likeCommentRequest.getCommentId()));
+    public long likeComment(long userId, long commentId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentNotFoundException(commentId));
 
         if(commentLikeRepository.findByUserAndComment(user, comment).isPresent()) {
          throw new DuplicateLikeException("User has already liked this comment");
@@ -106,7 +103,14 @@ public class CenterMarkerService {
         return commentLike.getId();
     }
 
-    public void deleteComment(long commentId) {
+    public void deleteComment(long userId, long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                        .orElseThrow(() -> new CommentNotFoundException(commentId));
+
+        if (comment.getUser().getId() != userId) {
+            throw new AuthorizationException("User is not authorized to delete this comment.");
+        }
+
         commentRepository.deleteById(commentId);
     }
 }

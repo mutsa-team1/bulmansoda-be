@@ -9,9 +9,6 @@ import lombok.Setter;
 @Getter
 public class CommentRequest {
 
-    @NotNull(message = "User id is required")
-    private long userId;
-
     @NotNull(message = "Center marker id is required")
     private long centerMarkerId;
 
@@ -19,7 +16,6 @@ public class CommentRequest {
     private String content;
 
     public CommentRequest(long userId, long centerMarkerId, String content) {
-        this.userId = userId;
         this.centerMarkerId = centerMarkerId;
         this.content = content;
     }

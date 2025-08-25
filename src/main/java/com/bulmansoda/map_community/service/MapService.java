@@ -2,6 +2,7 @@ package com.bulmansoda.map_community.service;
 
 import com.bulmansoda.map_community.dto.map_service.CenterMarkerResponse;
 import com.bulmansoda.map_community.dto.map_service.MarkerResponse;
+import com.bulmansoda.map_community.exception.AuthorizationException;
 import com.bulmansoda.map_community.exception.CenterMarkerNotFoundException;
 import com.bulmansoda.map_community.model.CenterMarker;
 import com.bulmansoda.map_community.model.Marker;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -24,9 +26,12 @@ import java.util.List;
 public class MapService {
 
     private static final Logger log = LogManager.getLogger(MapService.class);
+
     private final MarkerRepository markerRepository;
 
     private final CenterMarkerRepository centerMarkerRepository;
+
+    static private final List<Long> managementUserId = Arrays.asList(1L, 2L, 3L, 4L);
 
     @Autowired
     public MapService(MarkerRepository markerRepository, CenterMarkerRepository centerMarkerRepository) {
@@ -44,16 +49,15 @@ public class MapService {
         return centers.stream().map(CenterMarkerResponse::new).toList();
     }
 
-    public void problemSolved(long centerId) {
-        CenterMarker center = centerMarkerRepository.findById(centerId)
-                .orElseThrow(() -> new CenterMarkerNotFoundException(centerId));
-        markerRepository.deleteAllByCenterMarker(center);
-        centerMarkerRepository.delete(center);
-    }
+    public void problemSolved(long userId, long centerMarkerId) {
+        CenterMarker center = centerMarkerRepository.findById(centerMarkerId)
+                .orElseThrow(() -> new CenterMarkerNotFoundException(centerMarkerId));
 
-    public void refreshMap() {
-        markerRepository.deleteAll();
-        centerMarkerRepository.deleteAll();
+        if (!managementUserId.contains(userId)) {
+            throw new AuthorizationException("User is not authorized to decide whether fixed or not.");
+        }
+
+        centerMarkerRepository.delete(center);
     }
 
     @Scheduled(fixedRate = 3600000)

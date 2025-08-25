@@ -1,6 +1,5 @@
 package com.bulmansoda.map_community.service;
 
-import com.bulmansoda.map_community.dto.user_service.ChangeNameRequest;
 import com.bulmansoda.map_community.dto.user_service.CreateUserRequest;
 import com.bulmansoda.map_community.exception.UserNotFoundException;
 import com.bulmansoda.map_community.model.User;
@@ -31,10 +30,10 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
-    public void changeName(ChangeNameRequest request) {
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new UserNotFoundException(request.getUserId()));
-        user.setName(request.getName());
+    public void changeName(Long userId, String name) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+        user.setName(name);
     }
 
 
