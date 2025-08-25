@@ -101,10 +101,10 @@ public class MarkerService {
 
         boolean isLastMarker = (centerMarker != null && centerMarker.getMarkers().size() == 1);
 
-        markerRepository.delete(marker);
-
         if (isLastMarker) {
             centerMarkerRepository.delete(centerMarker);
         }
+
+        markerRepository.delete(marker);
     }
 }
