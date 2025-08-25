@@ -4,6 +4,7 @@ import com.bulmansoda.map_community.ai.OpenAIClient;
 import com.bulmansoda.map_community.ai.PromptBuilder;
 import com.bulmansoda.map_community.dto.ai.GptRequest;
 import com.bulmansoda.map_community.dto.ai.GptResponse;
+import com.bulmansoda.map_community.exception.AiProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,27 +39,14 @@ public class AiClusteringService {
 
         String jsonResponse = openAIClient.responseJson(systemPrompt, userPrompt, jsonSchema);
 
+        if (jsonResponse == null || jsonResponse.trim().isEmpty()) {
+            throw new AiProcessingException("Received no response from AI service.");
+        }
+
         try {
             return objectMapper.readValue(jsonResponse, GptResponse.class);
         } catch (Exception e) {
-            return createNewClusterFallback(marker);
+            throw new AiProcessingException("Failed to parse AI response JSON", e);
         }
-    }
-
-
-    private GptResponse createNewClusterFallback(GptRequest.MarkerForAI marker) {
-        GptResponse fallbackResponse = new GptResponse();
-        fallbackResponse.setAction("CREATE");
-
-        fallbackResponse.setLatitude(marker.getLatitude());
-        fallbackResponse.setLongitude(marker.getLongitude());
-
-        String[] contentWords = marker.getContent().split(" ");
-        String keyword1 = contentWords.length > 0 ? contentWords[0] : "이벤트";
-        String keyword2 = contentWords.length > 1 ? contentWords[1] : "상세정보";
-        String keyword3 = "확인필요";
-        fallbackResponse.setKeywords(new ArrayList<>(Arrays.asList(keyword1, keyword2, keyword3)));
-
-        return fallbackResponse;
     }
 }

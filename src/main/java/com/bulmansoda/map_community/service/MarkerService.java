@@ -43,6 +43,7 @@ public class MarkerService {
                 .orElseThrow(() -> new UserNotFoundException(request.getUserId()));
         marker.setUser(user);
         marker.setContent(request.getContent());
+        markerRepository.save(marker);
 
         GptRequest.MarkerForAI newMarkerForAI = new GptRequest.MarkerForAI();
         newMarkerForAI.setLatitude(request.getLatitude());
@@ -75,8 +76,10 @@ public class MarkerService {
         if ("UPDATE".equals(aiResponse.getAction())) {
             targetCenter = centerMarkerRepository.findById(aiResponse.getId())
                     .orElseThrow(() -> new CenterMarkerNotFoundException(aiResponse.getId()));
-        } else {
+        } else if ("CREATE".equals(aiResponse.getAction())) {
             targetCenter = new CenterMarker();
+        } else {
+            return marker.getId();
         }
 
         targetCenter.setLatitude(aiResponse.getLatitude());
