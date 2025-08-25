@@ -5,6 +5,7 @@ import com.bulmansoda.map_community.dto.ai.GptResponse;
 import com.bulmansoda.map_community.dto.marker_service.CreateMarkerRequest;
 import com.bulmansoda.map_community.exception.CenterMarkerNotFoundException;
 import com.bulmansoda.map_community.exception.MarkerNotFoundException;
+import com.bulmansoda.map_community.exception.UserNotFoundException;
 import com.bulmansoda.map_community.model.CenterMarker;
 import com.bulmansoda.map_community.model.Marker;
 import com.bulmansoda.map_community.model.User;
@@ -39,7 +40,7 @@ public class MarkerService {
         marker.setLatitude(request.getLatitude());
         marker.setLongitude(request.getLongitude());
         User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new MarkerNotFoundException(request.getUserId()));
+                .orElseThrow(() -> new UserNotFoundException(request.getUserId()));
         marker.setUser(user);
         marker.setContent(request.getContent());
 
