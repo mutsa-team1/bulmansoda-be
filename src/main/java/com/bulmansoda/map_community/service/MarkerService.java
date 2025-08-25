@@ -96,12 +96,15 @@ public class MarkerService {
     public void deleteMarker(long markerId) {
         Marker marker = markerRepository.findById(markerId)
                 .orElseThrow(() -> new MarkerNotFoundException(markerId));
+
         CenterMarker centerMarker = marker.getCenterMarker();
+
+        boolean isLastMarker = (centerMarker != null && centerMarker.getMarkers().size() == 1);
 
         markerRepository.delete(marker);
 
-        if (centerMarker != null && centerMarker.getMarkers().size() == 1) {
-                centerMarkerRepository.delete(centerMarker);
+        if (isLastMarker) {
+            centerMarkerRepository.delete(centerMarker);
         }
     }
 }
