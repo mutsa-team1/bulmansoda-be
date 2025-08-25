@@ -99,7 +99,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleWrongPassword(WrongPasswordException e) {
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
-        body.put("status", HttpStatus.UNAUTHORIZED);
+        body.put("status", HttpStatus.UNAUTHORIZED.value());
         body.put("error", "Wrong Password");
         body.put("message", "Password is wrong, try again.");
 
