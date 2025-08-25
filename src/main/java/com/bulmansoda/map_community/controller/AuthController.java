@@ -1,12 +1,14 @@
 package com.bulmansoda.map_community.controller;
 
 import com.bulmansoda.map_community.auth.JwtUtil;
+import com.bulmansoda.map_community.dto.auth.LoginRequest;
+import com.bulmansoda.map_community.repository.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -14,16 +16,30 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final JwtUtil jwtUtil;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    public AuthController(JwtUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
-    }
+    private JwtUtil jwtUtil;
 
-    @GetMapping("/login/{userId}")
-    public ResponseEntity<?> createAuthenticationToken(@PathVariable Long userId) {
-        final String token = jwtUtil.generateToken(userId);
+    @Autowired
+    private UserRepository userRepository;
+
+    @PostMapping("/login")
+    public ResponseEntity<?> createAuthenticationToken(@Valid @RequestBody LoginRequest loginRequest) throws Exception {
+        // 1. Authenticate using name and phone number (as password)
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequest.getName(), loginRequest.getPhoneNumber())
+        );
+
+        // 2. If authentication is successful, find the user to get their ID for the token payload
+        final com.bulmansoda.map_community.model.User user = userRepository.findByName(loginRequest.getName())
+                .orElseThrow(() -> new Exception("User not found after authentication"));
+
+        // 3. Generate the token with the user's database ID
+        final String token = jwtUtil.generateToken(user.getId());
+
+        // 4. Return the token in the response
         return ResponseEntity.ok(Map.of("token", token));
     }
 }
