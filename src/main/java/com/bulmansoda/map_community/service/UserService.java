@@ -37,7 +37,7 @@ public class UserService {
         User user = userRepository.findByName(name)
                 .orElseThrow(() -> new UserNotFoundException(name));
 
-        if (user.getPhoneNumber() != phoneNumber) {
+        if (!user.getPhoneNumber().equals(phoneNumber)) {
             throw new WrongPasswordException("Wrong Password");
         }
 

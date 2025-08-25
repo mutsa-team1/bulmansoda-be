@@ -98,14 +98,10 @@ public class MarkerService {
                 .orElseThrow(() -> new MarkerNotFoundException(markerId));
         CenterMarker centerMarker = marker.getCenterMarker();
 
-        markerRepository.deleteById(markerId);
+        markerRepository.delete(marker);
 
-        if (centerMarker != null) {
-            CenterMarker updatedCenterMarker = centerMarkerRepository.findById(centerMarker.getId()).orElse(null);
-
-            if (updatedCenterMarker != null && updatedCenterMarker.getMarkers().isEmpty()) {
-                centerMarkerRepository.delete(updatedCenterMarker);
-            }
+        if (centerMarker != null && centerMarker.getMarkers().size() == 1) {
+                centerMarkerRepository.delete(centerMarker);
         }
     }
 }
