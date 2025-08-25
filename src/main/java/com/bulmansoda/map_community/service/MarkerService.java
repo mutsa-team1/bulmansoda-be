@@ -3,8 +3,10 @@ package com.bulmansoda.map_community.service;
 import com.bulmansoda.map_community.dto.ai.GptRequest;
 import com.bulmansoda.map_community.dto.ai.GptResponse;
 import com.bulmansoda.map_community.dto.marker_service.CreateMarkerRequest;
+import com.bulmansoda.map_community.exception.AiProcessingException;
 import com.bulmansoda.map_community.exception.CenterMarkerNotFoundException;
 import com.bulmansoda.map_community.exception.MarkerNotFoundException;
+import com.bulmansoda.map_community.exception.UserNotFoundException;
 import com.bulmansoda.map_community.model.CenterMarker;
 import com.bulmansoda.map_community.model.Marker;
 import com.bulmansoda.map_community.model.User;
@@ -39,9 +41,10 @@ public class MarkerService {
         marker.setLatitude(request.getLatitude());
         marker.setLongitude(request.getLongitude());
         User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new MarkerNotFoundException(request.getUserId()));
+                .orElseThrow(() -> new UserNotFoundException(request.getUserId()));
         marker.setUser(user);
         marker.setContent(request.getContent());
+        markerRepository.save(marker);
 
         GptRequest.MarkerForAI newMarkerForAI = new GptRequest.MarkerForAI();
         newMarkerForAI.setLatitude(request.getLatitude());
@@ -68,14 +71,17 @@ public class MarkerService {
                     return centerForAI;
                 }).collect(Collectors.toList());
 
+
         GptResponse aiResponse = aiClusteringService.clusterOrIntegrate(newMarkerForAI, existingCentersForAI);
 
         CenterMarker targetCenter;
         if ("UPDATE".equals(aiResponse.getAction())) {
             targetCenter = centerMarkerRepository.findById(aiResponse.getId())
                     .orElseThrow(() -> new CenterMarkerNotFoundException(aiResponse.getId()));
-        } else {
+        } else if ("CREATE".equals(aiResponse.getAction())) {
             targetCenter = new CenterMarker();
+        } else {
+            return marker.getId();
         }
 
         targetCenter.setLatitude(aiResponse.getLatitude());
@@ -87,6 +93,7 @@ public class MarkerService {
         markerRepository.save(marker);
 
         return marker.getId();
+
     }
 
     public void deleteMarker(long markerId) {
