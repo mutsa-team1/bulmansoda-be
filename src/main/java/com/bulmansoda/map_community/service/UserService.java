@@ -1,12 +1,12 @@
 package com.bulmansoda.map_community.service;
 
-import com.bulmansoda.map_community.dto.user_service.ChangeNameRequest;
 import com.bulmansoda.map_community.dto.user_service.CreateUserRequest;
 import com.bulmansoda.map_community.exception.UserNotFoundException;
 import com.bulmansoda.map_community.exception.WrongPasswordException;
 import com.bulmansoda.map_community.model.User;
 import com.bulmansoda.map_community.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +24,7 @@ public class UserService {
         User user = new User();
         user.setName(request.getName());
         user.setPhoneNumber(request.getPhoneNumber());
+
         userRepository.save(user);
 
         return user.getId();
@@ -44,10 +45,10 @@ public class UserService {
         return user.getId();
     }
 
-    public void changeName(ChangeNameRequest request) {
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new UserNotFoundException(request.getUserId()));
-        user.setName(request.getName());
+    public void changeName(Long userId, String name) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+        user.setName(name);
     }
 
 
