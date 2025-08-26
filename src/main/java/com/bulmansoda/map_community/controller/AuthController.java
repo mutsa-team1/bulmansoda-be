@@ -2,7 +2,6 @@ package com.bulmansoda.map_community.controller;
 
 import com.bulmansoda.map_community.auth.JwtUtil;
 import com.bulmansoda.map_community.dto.auth.LoginRequest;
-import com.bulmansoda.map_community.exception.UserNotFoundException;
 import com.bulmansoda.map_community.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,7 @@ public class AuthController {
 
         // 2. If authentication is successful, find the user to get their ID for the token payload
         final com.bulmansoda.map_community.model.User user = userRepository.findByName(loginRequest.getName())
-                .orElseThrow(() -> new UserNotFoundException(loginRequest.getName()));
+                .orElseThrow(() -> new Exception("User not found after authentication"));
 
         // 3. Generate the token with the user's database ID
         final String token = jwtUtil.generateToken(user.getId());
